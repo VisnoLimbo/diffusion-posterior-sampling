@@ -1,6 +1,5 @@
 # Diffusion-Based Wireless Channel Map Reconstruction with Reflection Phase Modeling
 
-MSc thesis (2026) · **Vishnu Kumar Limbu** (AU760417) · Aarhus University, Department of Electrical and Computer Engineering · Supervisor: **Hei Victor Cheng**.
 
 **Can we rebuild a complete wireless "radio map" of a city block from just 10% of the measurements — including the hard-to-capture signal *phase*?** This project does exactly that: it (1) generates a physically accurate synthetic dataset of radio maps and (2) trains a diffusion model to reconstruct the full map from sparse, scattered samples.
 
