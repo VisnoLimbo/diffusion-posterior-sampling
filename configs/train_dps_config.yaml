@@ -1,0 +1,42 @@
+# Dataset configurations
+train_dataset:
+  name: 'aoa_amp'
+  root: './data/aoa_amp_cache'
+  grid_resolution: 1.5625
+  num_bs: 1
+  bs_range: [-40, 40]
+  wavelength: 0.1
+  num_samples: 1000
+  cache_data: True
+
+val_dataset:
+  name: 'aoa_amp'
+  root: './data/aoa_amp_cache'
+  grid_resolution: 1.5625
+  num_bs: 1
+  bs_range: [-40, 40]
+  wavelength: 0.1
+  num_samples: 1024
+  cache_data: True
+
+# Training parameters
+batch_size: 16
+num_workers: 4
+epochs: 200
+data_channels: 2
+
+# Optimizer settings
+optimizer:
+  lr: 0.0001
+  beta1: 0.9
+  beta2: 0.999
+
+# Training schedule
+log_interval: 100
+val_interval: 5
+save_interval: 10
+
+# Paths
+log_dir: './logs/aoa_amp_dps'
+checkpoint_dir: './checkpoints/aoa_amp_dps'
+resume_checkpoint: null

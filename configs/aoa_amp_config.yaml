@@ -1,0 +1,55 @@
+# Configuration for training diffusion model on AoA/Amplitude data
+
+# Model architecture settings
+image_size: 64          # Spatial resolution (64x64 - supported size)
+num_channels: 64        # Base number of channels (smaller for 2-channel data)
+num_res_blocks: 2       # Number of residual blocks per resolution
+channel_mult: ""        # Use default for 64x64
+attention_resolutions: "16"  # Default attention resolution for 64x64
+num_heads: 4            # Number of attention heads
+num_head_channels: 16   # Channels per attention head
+use_scale_shift_norm: True
+dropout: 0.1
+resblock_updown: True
+use_checkpoint: False
+use_fp16: False
+use_new_attention_order: False
+model_path: checkpoints/aoa_amp_dps/checkpoint_50.pt
+
+# choices of checkpoint:
+# checkpoint_100.pt timestep=1000
+# checkpoint_30.pt timestep=500
+#
+# Data-specific settings - these will be handled separately
+# in_channels: 2          # AoA + Amplitude = 2 channels (for 1 BS)  
+# out_channels: 2         # Same as input
+class_cond: False       # No class conditioning
+learn_sigma: True       # Learn noise variance
+
+# Channel configuration (handled separately in training script)
+data_channels: 2        # AoA + Amplitude = 2 channels (for 1 BS)
+
+# Training settings - will be used by training script
+batch_size: 16
+learning_rate: 0.0001
+num_epochs: 200
+save_interval: 5000     # Save checkpoint every N steps
+epoch_save_interval: 10 # Save full checkpoint/samples every N epochs
+log_interval: 100       # Log every N steps
+
+# Dataset settings
+dataset:
+  name: "aoa_amp"
+  root: "./data/aoa_amp_cache"
+  grid_resolution: 1.5625  # Creates 64x64 grid (100/1.5625 = 64)
+  num_bs: 1             # Start with 1 BS, can increase later
+  bs_range: [-40, 40]
+  wavelength: 0.1
+  num_samples: 100    # Number of training samples (reduced for testing)
+  cache_data: True
+
+# DataLoader settings
+dataloader:
+  batch_size: 16
+  num_workers: 4
+  shuffle: True

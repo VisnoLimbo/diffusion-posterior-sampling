@@ -1,0 +1,26 @@
+conditioning:
+  method: ps
+  params:
+    scale: 0.5
+
+data:
+  name: aoa_amp
+  root: ./data/aoa_amp_cache
+  grid_resolution: 1.5625
+  num_bs: 1
+  bs_range: [-40, 40]
+  wavelength: 0.1
+  num_samples: 32
+  cache_data: True
+
+measurement:
+  operator:
+    name: inpainting
+  mask_opt:
+    mask_type: random
+    mask_prob_range: !!python/tuple [0.3, 0.7]
+    image_size: 64
+
+  noise:
+    name: gaussian
+    sigma: 0.05

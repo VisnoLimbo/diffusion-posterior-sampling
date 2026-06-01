@@ -1,0 +1,65 @@
+# Configuration for training diffusion model on AoA/Amplitude data with buildings
+# This uses the ray tracing approach with fixed buildings and strongest 3 paths
+
+# Model architecture settings
+image_size: 128         # Spatial resolution (128x128 to match map size)
+num_channels: 64        # Base number of channels
+num_res_blocks: 2       # Number of residual blocks per resolution
+channel_mult: "1,2,2,4"  # Channel multipliers for different resolutions
+attention_resolutions: "16,32"  # Attention at 16x16 and 32x32
+num_heads: 4            # Number of attention heads
+num_head_channels: 16   # Channels per attention head
+use_scale_shift_norm: True
+dropout: 0.1
+resblock_updown: True
+use_checkpoint: False
+use_fp16: False
+use_new_attention_order: False
+model_path: checkpoints/aoa_amp_building/checkpoint_epoch_100.pt
+
+# Data-specific settings
+class_cond: False       # No class conditioning
+learn_sigma: True       # Learn noise variance
+
+# Channel configuration (12 channels: 3 AoA + 3 Amplitude + 3 sin(phase) + 3 cos(phase))
+data_channels: 12       # AoA + Amplitude + sin(phase) + cos(phase) for 3 strongest paths
+
+# Training settings
+batch_size: 8
+learning_rate: 0.0001
+num_epochs: 100         # 100 epochs on 54k samples - full thesis run (~62h on A100 over 3 sessions)
+save_interval: 2000     # Save checkpoint every N steps
+epoch_save_interval: 5  # Save full checkpoint/samples every N epochs
+log_interval: 50        # Log every N steps
+
+# Dataset settings
+dataset:
+  name: "aoa_amp_building"
+  root: "./data/building_training_randomized"
+  map_size: [128, 128]
+  grid_spacing: 1.0     # UE grid spacing (creates 128x128 grid)
+  bs_grid_spacing: 4.0  # BS every 4m -> 30x30 = 900 BS per layout (54,000 samples total)
+
+ # Randomized building configurations
+  num_building_sets: 60
+  building_distribution: [20, 20, 20]
+  building_size_range: [[15, 35], [10, 25]]  # [[min_width, max_width], [min_height, max_height]]
+  min_building_distance: 5.0
+  seed: 42
+
+  use_existing_data: True  # Use existing data if available
+  normalize_data: True
+
+# GPU optimization parameters
+  device: 'auto'  # 'cuda', 'cpu', or 'auto'
+  use_gpu_processing: True
+  batch_size: 32
+  num_workers: 4
+  pin_memory: True
+  prefetch_factor: 2
+
+# DataLoader settings
+dataloader:
+  batch_size: 8
+  num_workers: 2
+  shuffle: True

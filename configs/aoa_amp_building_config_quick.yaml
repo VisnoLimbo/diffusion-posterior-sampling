@@ -1,0 +1,77 @@
+# QUICK PILOT-RUN CONFIG - reduced scale for fast end-to-end pipeline validation.
+# For the real full-scale 100-epoch run, use configs/aoa_amp_building_config.yaml.
+#
+# Differences from the full config:
+#   num_epochs            100        -> 5
+#   epoch_save_interval   5          -> 1     (checkpoint every epoch)
+#   num_building_sets     60         -> 6
+#   building_distribution [20,20,20] -> [2,2,2]
+#   bs_grid_spacing       4.0        -> 8.0   (4x fewer BS positions = ~4x less data)
+#   dataset root          -> ./data/building_quick_test  (separate from the full run)
+#   model_path            -> checkpoints/aoa_amp_building_quick/checkpoint_epoch_5.pt
+#
+# The model ARCHITECTURE is identical to the full config, so a quick-run
+# checkpoint stays structurally compatible (only the training data/epochs differ).
+
+# Model architecture settings
+image_size: 128
+num_channels: 64
+num_res_blocks: 2
+channel_mult: "1,2,2,4"
+attention_resolutions: "16,32"
+num_heads: 4
+num_head_channels: 16
+use_scale_shift_norm: True
+dropout: 0.1
+resblock_updown: True
+use_checkpoint: False
+use_fp16: False
+use_new_attention_order: False
+model_path: checkpoints/aoa_amp_building_quick/checkpoint_epoch_5.pt
+
+# Data-specific settings
+class_cond: False
+learn_sigma: True
+
+# Channel configuration (12 channels: 3 AoA + 3 Amplitude + 3 sin(phase) + 3 cos(phase))
+data_channels: 12
+
+# Training settings - REDUCED for the quick run
+batch_size: 8
+learning_rate: 0.0001
+num_epochs: 5
+save_interval: 2000
+epoch_save_interval: 1
+log_interval: 50
+
+# Dataset settings - REDUCED for the quick run
+dataset:
+  name: "aoa_amp_building"
+  root: "./data/building_quick_test"
+  map_size: [128, 128]
+  grid_spacing: 1.0
+  bs_grid_spacing: 8.0
+
+ # Randomized building configurations (small)
+  num_building_sets: 6
+  building_distribution: [2, 2, 2]
+  building_size_range: [[15, 35], [10, 25]]
+  min_building_distance: 5.0
+  seed: 42
+
+  use_existing_data: True
+  normalize_data: True
+
+# GPU optimization parameters
+  device: 'auto'
+  use_gpu_processing: True
+  batch_size: 32
+  num_workers: 4
+  pin_memory: True
+  prefetch_factor: 2
+
+# DataLoader settings
+dataloader:
+  batch_size: 8
+  num_workers: 2
+  shuffle: True

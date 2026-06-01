@@ -1,0 +1,28 @@
+conditioning:
+  method: ps
+  params:
+    scale: 5.0
+
+measurement:
+  operator:
+    name: inpainting
+  mask_opt:
+    mask_type: random
+    mask_prob_range: !!python/tuple [0.9, 0.9]
+    image_size: 128
+  noise:
+    name: gaussian
+    sigma: 0.05
+
+data:
+  name: aoa_amp_building
+  root: ./data/building_training_randomized
+  map_size: [128, 128]
+  grid_spacing: 1.0
+  bs_grid_spacing: 4.0
+  num_building_sets: 60
+  building_distribution: [20, 20, 20]
+  seed: 42
+  use_existing_data: True
+  normalize_data: True
+  num_samples: 16

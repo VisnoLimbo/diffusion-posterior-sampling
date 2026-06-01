@@ -1,0 +1,18 @@
+# Model Architecture
+image_size: 256  # Input image size
+num_channels: 128  # Base channel count
+num_res_blocks: 2  # Number of residual blocks
+channel_mult: ""  # Channel multiplier for each level
+learn_sigma: False  # Whether to learn sigma
+class_cond: False  # Whether to use class conditioning
+use_checkpoint: False  # Whether to use checkpointing to save memory
+attention_resolutions: "16"  # Image sizes where attention will be applied
+num_heads: 4  # Number of attention heads
+num_head_channels: 64  # Number of channels in attention heads
+num_heads_upsample: -1  # Number of attention heads for upsampling
+use_scale_shift_norm: True  # Whether to use scale and shift in normalization
+dropout: 0.0  # Dropout rate
+resblock_updown: True  # Whether to use residual blocks for up/down sampling
+use_fp16: False  # Whether to use fp16 precision
+use_new_attention_order: False  # Whether to use new attention order
+model_path: 'checkpoints/diffusion/model_state.pt'  # Path to pretrained model if using one

@@ -1,0 +1,17 @@
+#  older/default DPS configuration from upstream
+# Sampler configuration
+sampler: "ddpm"  # Type of sampler to use
+steps: 1000  # Number of diffusion steps
+noise_schedule: "linear"  # Type of noise schedule
+
+# Model parameters
+model_mean_type: "previous_x"  # Options: 'previous_x' (currently only this is supported)
+model_var_type: "fixed_small"  # Options: 'learned', 'fixed_small', 'fixed_large'
+
+# Sampling parameters
+dynamic_threshold: False  # Whether to use dynamic thresholding
+clip_denoised: True  # Whether to clip denoised values
+rescale_timesteps: True  # Whether to rescale timesteps
+timestep_respacing: ""  # Can be used to reduce the number of timesteps
+dynamic_threshold: False  # Whether to use dynamic thresholding
+clip_denoised: True  # Whether to clip denoised values to [-1, 1]

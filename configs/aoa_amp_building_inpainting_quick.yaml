@@ -1,0 +1,32 @@
+# QUICK PILOT-RUN inference/inpainting config.
+# Matches configs/aoa_amp_building_config_quick.yaml (same reduced dataset).
+# For the full-scale run, use configs/aoa_amp_building_inpainting.yaml.
+
+conditioning:
+  method: ps
+  params:
+    scale: 5.0
+
+measurement:
+  operator:
+    name: inpainting
+  mask_opt:
+    mask_type: random
+    mask_prob_range: !!python/tuple [0.9, 0.9]
+    image_size: 128
+  noise:
+    name: gaussian
+    sigma: 0.05
+
+data:
+  name: aoa_amp_building
+  root: ./data/building_quick_test
+  map_size: [128, 128]
+  grid_spacing: 1.0
+  bs_grid_spacing: 8.0
+  num_building_sets: 6
+  building_distribution: [2, 2, 2]
+  seed: 42
+  use_existing_data: True
+  normalize_data: True
+  num_samples: 4

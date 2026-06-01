@@ -1,0 +1,11 @@
+sampler: ddpm
+# sampler: ddim
+steps: 100 # sets the length of the forward diffusion chain used during training
+noise_schedule: linear
+model_mean_type: epsilon 
+model_var_type: learned_range
+dynamic_threshold: False
+clip_denoised: True
+rescale_timesteps: False
+timestep_respacing: 100 # controls how many of those trained steps you actually use at sampling time.
+# timestep_respacing: ddim50
