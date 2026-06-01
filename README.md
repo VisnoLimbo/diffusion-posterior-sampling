@@ -1,23 +1,23 @@
 # Diffusion-Based Wireless Channel Map Reconstruction with Reflection Phase Modeling
 
 
-**Can we rebuild a complete wireless "radio map" of a city block from just 10% of the measurements — including the hard-to-capture signal *phase*?** This project does exactly that: it (1) generates a physically accurate synthetic dataset of radio maps and (2) trains a diffusion model to reconstruct the full map from sparse, scattered samples.
+**Can we rebuild a complete wireless "radio map" of a city block from just 10% of the measurements including the hard-to-capture signal *phase*?** This project does exactly that: it (1) generates a physically accurate synthetic dataset of radio maps and (2) trains a diffusion model to reconstruct the full map from sparse, scattered samples.
 
 ## The idea
 - A **ray tracer** simulates how a 2.4 GHz signal travels from a base station to every point on a 128×128 grid via three paths: **line-of-sight, reflection off buildings, and diffraction around corners**.
-- For each path it stores **angle of arrival, amplitude, and phase** — with phase from real physics (**Fresnel** reflection coefficients for concrete via ITU-R P.2040-4, **UTD** for 90° corners), not guessed.
+- For each path it stores **angle of arrival, amplitude, and phase** with phase from real physics (**Fresnel** reflection coefficients for concrete via ITU-R P.2040-4, **UTD** for 90° corners), not guessed.
 - Phase is encoded as **(sin, cos)** to avoid the ±π "wrap-around" problem, producing a **12-channel** radio map.
 - A **diffusion model (DDPM, ~21M-parameter U-Net)** learns what realistic radio maps look like; at inference, **Diffusion Posterior Sampling (DPS)** fills in a full map from only 10% of observed pixels.
 
 ## Why it matters
-Earlier work reconstructed only angle + amplitude (6 channels) and treated phase as a constant. This project adds **physically grounded phase** as a first-class quantity — and shows the learned model recovers phase exactly where classical interpolation fails.
+Earlier work reconstructed only angle + amplitude (6 channels) and treated phase as a constant. This project adds **physically grounded phase** as a first-class quantity and shows the learned model recovers phase exactly where classical interpolation fails.
 
 ## Key results
 *(epoch 100, 16 unseen test scenes, 90% of pixels missing)*
 - Overall reconstruction error **NMSE = 0.162** across all 12 channels.
 - Direct-path angle and phase recovered almost perfectly (NMSE 0.002–0.012).
 - **Up to ~400× more accurate than nearest-neighbour interpolation on the phase channels**, where interpolation is no better than a constant guess.
-- Reconstructed (sin, cos) pairs stay within ~5% of the unit circle — the model learned the circular nature of phase on its own.
+- Reconstructed (sin, cos) pairs stay within ~5% of the unit circle the model learned the circular nature of phase on its own.
 
 ## How to run
 Python 3.9–3.11, GPU recommended.
@@ -53,8 +53,3 @@ The 54,000-sample dataset (~22 GB HDF5) and trained checkpoints are not stored h
 ## Built on
 This work extends **Diffusion Posterior Sampling (DPS)** (Chung et al., ICLR 2023) and OpenAI's **guided-diffusion**.
 
-## Citation
-> V. K. Limbu, *Dataset Generation for Diffusion-Based Wireless Channel Map Reconstruction Including Reflection Phase Modeling*, MSc thesis, Aarhus University, 2026.
-
-## License
-MIT © 2026 Vishnu Kumar Limbu. Components derived from DPS and guided-diffusion remain under their upstream licenses.
